@@ -8,6 +8,29 @@
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
+class MyResource : public QObject
+{
+	Q_OBJECT
+public:
+	// Constructor, etc.
+	explicit MyResource(QObject* parent = nullptr) : QObject(parent) {}
+
+	// We'll use this to demonstrate a custom string conversion:
+	Q_INVOKABLE QString myToString() {
+		return QString("Hello from MyResource::myToString()");
+	}
+
+	Q_INVOKABLE QString someOtherInvokable() {
+		return QString("Hello from MyResource::someOtherInvokable()");
+	}
+	Q_INVOKABLE QString someMoreInvokable(const QJSValue& input) {
+		return input.toString() + QString("Hello from MyResource::someMoreInvokable()");
+	}
+};
+
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 class C_List_Basis : public QObject
 {
 	Q_OBJECT
