@@ -67,7 +67,7 @@ void Widget_factory::setup_engine()
 		}
 
 		{
-			// Evaluate a script that assigns the function to myFuncs.add_the_name
+			// Evaluate a script that assigns the function to myFuncs.add_the_names
 			QString script = R"(
 				myFuncs.add_the_names = function(x) {
 					return x + this.the_name + "gut!<";
