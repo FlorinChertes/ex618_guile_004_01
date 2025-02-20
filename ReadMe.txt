@@ -43,4 +43,34 @@ $env:PATH += ";C:\Qt\5.15.2\msvc2019_64\bin"
 ($Env:PATH -split ';') | ForEach-Object { $_ }
 
 
+//---
+2025-02-20
+
+### 1. Ensure you are on `main`
+```bash
+git checkout main
+git pull origin main
+```
+- **git checkout main**: Switches your local repo to the `main` branch.
+- **git pull origin main**: Fetches the latest changes from the remote `origin` and merges them into your local `main`. (Recommended to keep your `main` branch up-to-date before creating a new branch.)
+
+---
+
+### 2. Create a new branch `branch_01` from `main` and switch to it
+```bash
+git checkout -b branch_01
+```
+- The `-b` flag does two things at once:
+  - Creates a new branch called `branch_01`.
+  - Checks out that new branch so you are now working on it.
+
+*(Alternatively, you can use `git switch -c branch_01` on newer Git versions, which does the same thing.)*
+
+---
+
+### 3. Switch back to `main`
+```bash
+git checkout main
+```
+- This will take you out of `branch_01` and back to `main`.
 
