@@ -64,5 +64,4 @@ public:
 
 private:
 	QScriptValue the_function_;
-	QScriptValue my_functions_;
 };
