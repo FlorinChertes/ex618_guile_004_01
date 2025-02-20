@@ -126,3 +126,21 @@ add_executable(${GUILE_APP_NAME_03}
 target_link_libraries(${GUILE_APP_NAME_03} Qt5::Script Qt5::Core Qt5::Widgets)
 target_include_directories(${GUILE_APP_NAME_03} PUBLIC ${INCLUDE_DIRS} ${INCLUDE_DIRS_03} ${INCLUDE_LOCAL_DIRS})
 
+
+#------------------------------------------------------------------------------
+# add app 5
+#------------------------------------------------------------------------------
+SET(GUILE_APP_NAME_05 "guile_app_04_05")
+add_executable(${GUILE_APP_NAME_05}
+
+	inc/widget_factory_05.h
+	src/widget_factory_05.cpp
+
+	inc/dialog_dynamic_05.h
+	src/dialog_dynamic_05.cpp
+
+	main/main_05.cpp
+)
+target_link_libraries(${GUILE_APP_NAME_05} Qt5::Script Qt5::Core Qt5::Widgets)
+target_include_directories(${GUILE_APP_NAME_05} PUBLIC ${INCLUDE_DIRS} ${INCLUDE_DIRS_03} ${INCLUDE_LOCAL_DIRS})
+

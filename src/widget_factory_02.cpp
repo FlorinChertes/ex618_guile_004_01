@@ -7,11 +7,25 @@
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
+QJSValue MyResource::getTexts() const
+{
+	qDebug() << "called: MyResource::getTexts";
+	QJSValue result = engine_.newArray(3);
+
+	result.setProperty(0, 123);
+	result.setProperty(1, 456);
+	result.setProperty(2, "some string");
+
+	return result;
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 C_List_Basis::C_List_Basis() { qDebug() << "ctor C_List_Basis called"; }
 C_List_Basis::~C_List_Basis() { qDebug() << "dtor C_List_Basis called"; }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+//-------.----------------------------------------------------------------------
 void C_List_Basis::update()
 {
 	qDebug() << "called: C_List_Basis::update";
@@ -61,7 +75,7 @@ void Widget_factory::setup_engine()
 		qDebug() << "\n*** start the prototype approach, instantiate a class, \
 		MyResource and expose it to QJSEngine  ***";
 		// 1. Create a C++ object
-		QObject* res = new MyResource();
+		QObject* res = new MyResource(nullptr, engine);
 
 		// 2. Wrap the C++ object as a QJSValue
 		QJSValue jsRes = engine.newQObject(res);
@@ -96,7 +110,7 @@ void Widget_factory::setup_engine()
 		qDebug() << "\n*** start the wrapper approach  ***";
 
 		// 1. Create your QObject and wrap it via newQObject
-		QObject* res = new MyResource();
+		QObject* res = new MyResource(nullptr, engine);
 
 		// 1.1. Wrap the C++ object as a QJSValue
 		QJSValue cxxResourceValue = engine.newQObject(res);
@@ -121,6 +135,11 @@ void Widget_factory::setup_engine()
 				callMoreMethod: function() {
 					var input_text = "before hello: ";
 					return this._cxx.someMoreInvokable(input_text);
+				},
+
+				get texts() {
+					//access to the Q_PROPERTY
+					return this._cxx.texts;
 				}
 			};
 		})
@@ -238,6 +257,10 @@ void Widget_factory::onButtonClickted_that()
 		// This should print:  "Hello from MyResource::myToString()"
 
 		qDebug() << "toString done";
+
+		qDebug() << "text start";
+		result_ = engine.evaluate("myObj.texts.length");
+		qDebug() << "texts length of 3 is: " << result_.toString();
 	}
 
 	{
@@ -258,6 +281,11 @@ void Widget_factory::onButtonClickted_that()
 
 
 		qDebug() << "toString Wrapp done";
+
+		qDebug() << "text start";
+		result_ = engine.evaluate("myObjWrapp.texts");
+		qDebug() << "texts 3 is: " << result_.toString();
+
 	}
 
 }

@@ -27,10 +27,15 @@ void Widget_factory::setup_engine()
 
 	qDebug() << "\n*** instantiate a class and expose it to QJSEngine  ***";
 	// Create a instance of a class
-	MyFunctions* myFuncs{ new MyFunctions {} };
+	auto myFuncs{ new MyFunctions {} };
 	// Expose the instance to QJSEngine
 	QJSValue value = engine.newQObject(myFuncs);
 	engine.globalObject().setProperty("myFuncs", value);
+	// Instruct QJSEngine that JavaScript should own (and delete) myFuncs
+	// for Qt6
+	//QJSEngine::setObjectOwnership(myFuncs, QJSEngine::JavaScriptOwnership);
+	// for Qt5, only if needed!
+	//QQmlEngine::setObjectOwnership(myFuncs, QQmlEngine::JavaScriptOwnership);
 
 	qDebug() << "\n*** instantiate a factory and expose it to QJSEngine  ***";
 	Factory* factory{ new Factory{} };

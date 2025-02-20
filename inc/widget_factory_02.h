@@ -11,9 +11,18 @@
 class MyResource : public QObject
 {
 	Q_OBJECT
+
+	Q_PROPERTY(QJSValue texts READ getTexts)
+
 public:
 	// Constructor, etc.
-	explicit MyResource(QObject* parent = nullptr) : QObject(parent) {}
+	explicit MyResource(QObject* parent
+	, QJSEngine& engine)
+		: QObject(parent)
+		, engine_{engine}
+	{}
+	// accessors for composition 'texts'
+	QJSValue getTexts() const;
 
 	// We'll use this to demonstrate a custom string conversion:
 	Q_INVOKABLE QString myToString() {
@@ -26,6 +35,8 @@ public:
 	Q_INVOKABLE QString someMoreInvokable(const QJSValue& input) {
 		return input.toString() + QString("Hello from MyResource::someMoreInvokable()");
 	}
+
+	QJSEngine& engine_;
 };
 
 
