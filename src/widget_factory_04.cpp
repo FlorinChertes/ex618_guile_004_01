@@ -43,7 +43,7 @@ void Widget_factory::setup_engine()
 	engine.globalObject().setProperty("myFuncs", my_funcs_ptr->the_exposed_obj_);
 
 	{
-		qDebug() << "\n*** expose to QScriptEngine the named function: function(x) {return x + the_name} ***";
+		qDebug() << "\n*** expose to QScriptEngine the named function: function(x) {return x + this.the_name} ***";
 		QString script = R"(
 			(function(x) {
 				return x + this.the_name + "gut!<";
@@ -55,6 +55,18 @@ void Widget_factory::setup_engine()
 			qWarning() << "Error evaluating function script:" << engine.evaluate("Error").toString();
 		}
 	}
+
+	{
+		qDebug() << "\n*** a named function: this.a_named_function = function(x) {return x + this.the_name} ***";
+		QString script = R"(
+			this.a_named_function = (function(x) {
+				return x + this.the_name + "gut!<";
+			})
+		)";
+		// Evaluate the script, loading the function into the QScriptEngine
+		my_funcs_ptr->the_named_function_ = engine.evaluate(script);
+	}
+
 }
 
 //-----------------------------------------------------------------------------
@@ -132,6 +144,20 @@ void Widget_factory::onButtonClickted_that()
 			qDebug() << "Result of Laur + Flori is: " << result.toString();
 		}
 	}
+
+	{
+		qDebug() << "\n*** script QJSEngine call the named function ***";
+
+		QString func_script{ R"(
+		myFuncs.the_name = "Flori ";
+		var the_sum = myFuncs.call_the_name_fuction(">Laur ");
+		the_sum;
+		)" };
+
+		QJSValue result = engine.evaluate(func_script);
+		qDebug() << "Result named function is: " << result.toString();
+	}
+
 }
 
 //-----------------------------------------------------------------------------
@@ -144,5 +170,21 @@ QJSValue MyFunctions::add_the_name(const QJSValue& a)
 	args << a;
 
 	QJSValue result = the_add_name_function_.callWithInstance(the_exposed_obj_, args);
+	return result;
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+QJSValue MyFunctions::call_the_name_fuction(const QJSValue& a)
+{
+	QJSValue result{};
+
+	if (the_named_function_.isCallable())
+	{
+		QJSValueList args;
+		args << a;
+		result = the_named_function_.callWithInstance(the_exposed_obj_, args);
+	}
+
 	return result;
 }

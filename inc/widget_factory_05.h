@@ -22,12 +22,15 @@ public:
 	void setTheName(QScriptValue name_);
 
 	Q_INVOKABLE QScriptValue add_the_name(const QScriptValue& a);
+	Q_INVOKABLE QScriptValue call_the_name_fuction(const QScriptValue& a);
 
 private:
 	QString the_name_;
 
 public:
 	QScriptValue the_add_name_function_;
+	QScriptValue the_named_function_;
+
 	QScriptValue the_exposed_obj_;
 };
 
